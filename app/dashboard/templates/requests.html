@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="section">
+    <h2>All Requests — {{ total }} total</h2>
+
+    <!-- Filter + Search Bar -->
+    <form method="GET" action="/dashboard/requests" class="filter-bar">
+        <input
+            type="text"
+            name="search"
+            placeholder="Search by IP or URL..."
+            value="{{ search }}"
+            class="filter-search"
+        >
+
+        <select name="attack_type" class="filter-select">
+            <option value="">All Attack Types</option>
+            {% for at in attack_types %}
+            <option value="{{ at }}" {{ 'selected' if selected_attack == at }}>{{ at }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="status" class="filter-select">
+            <option value="">All Status</option>
+            <option value="safe"    {{ 'selected' if selected_status == 'safe' }}>Safe</option>
+            <option value="blocked" {{ 'selected' if selected_status == 'blocked' }}>Blocked</option>
+        </select>
+
+        <button type="submit" class="filter-btn">Filter</button>
+        <a href="/dashboard/requests" class="filter-reset">Reset</a>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Time</th>
+                <th>IP</th>
+                <th>Method</th>
+                <th>URL</th>
+                <th>Status</th>
+                <th>Attack Type</th>
+                <th>ML Score</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr class="{{ 'row-danger' if log.is_malicious else 'row-safe' }}">
+                <td>{{ log.id }}</td>
+                <td>{{ log.timestamp }}</td>
+                <td>{{ log.ip_address }}</td>
+                <td>{{ log.method }}</td>
+                <td>{{ log.url[:40] }}...</td>
+                <td>
+                    {% if log.blocked %}
+                        <span class="badge danger">Blocked</span>
+                    {% else %}
+                        <span class="badge safe">Safe</span>
+                    {% endif %}
+                </td>
+                <td>{{ log.attack_type or "-" }}</td>
+                <td>{{ log.ml_score or "-" }}</td>
+                <td><a href="/dashboard/requests/{{ log.id }}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if page > 1 %}
+            <a href="/dashboard/requests?page={{ page - 1 }}&search={{ search }}&attack_type={{ selected_attack }}&status={{ selected_status }}">← Prev</a>
+        {% endif %}
+
+        <span>Page {{ page }} of {{ total_pages }}</span>
+
+        {% if page < total_pages %}
+            <a href="/dashboard/requests?page={{ page + 1 }}&search={{ search }}&attack_type={{ selected_attack }}&status={{ selected_status }}">Next →</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

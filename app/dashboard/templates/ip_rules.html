@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="section">
+    <h2>Add IP Rule</h2>
+    <form method="POST" action="/dashboard/ip-rules/add" class="filter-bar">
+        <input type="text" name="ip_address" placeholder="IP Address (e.g. 192.168.1.1)" class="filter-search" required>
+        <select name="rule_type" class="filter-select">
+            <option value="blacklist">Blacklist</option>
+            <option value="whitelist">Whitelist</option>
+        </select>
+        <input type="text" name="reason" placeholder="Reason (optional)" class="filter-search">
+        <button type="submit" class="filter-btn">Add Rule</button>
+    </form>
+</div>
+
+<!-- Blacklist -->
+<div class="section">
+    <h2>🔴 Blacklist ({{ blacklist|length }})</h2>
+    {% if blacklist %}
+    <table>
+        <thead>
+            <tr>
+                <th>IP Address</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule in blacklist %}
+            <tr class="row-danger">
+                <td>{{ rule.ip_address }}</td>
+                <td>{{ rule.reason or "-" }}</td>
+                <td>
+                    {% if rule.active %}
+                        <span class="badge danger">Active</span>
+                    {% else %}
+                        <span class="badge" style="background:#333;color:#888">Disabled</span>
+                    {% endif %}
+                </td>
+                <td>{{ rule.created_at }}</td>
+                <td style="display:flex;gap:0.5rem">
+                    <form method="POST" action="/dashboard/ip-rules/toggle/{{ rule.id }}">
+                        <button type="submit" class="filter-btn" style="padding:0.3rem 0.75rem;font-size:0.8rem;background:{% if rule.active %}#ff9800{% else %}#4caf50{% endif %}">
+                            {{ "Disable" if rule.active else "Enable" }}
+                        </button>
+                    </form>
+                    <form method="POST" action="/dashboard/ip-rules/delete/{{ rule.id }}">
+                        <button type="submit" class="filter-btn" style="padding:0.3rem 0.75rem;font-size:0.8rem;background:#f44336">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:#888">No blacklisted IPs</p>
+    {% endif %}
+</div>
+
+<!-- Whitelist -->
+<div class="section">
+    <h2>🟢 Whitelist ({{ whitelist|length }})</h2>
+    {% if whitelist %}
+    <table>
+        <thead>
+            <tr>
+                <th>IP Address</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule in whitelist %}
+            <tr class="row-safe">
+                <td>{{ rule.ip_address }}</td>
+                <td>{{ rule.reason or "-" }}</td>
+                <td>
+                    {% if rule.active %}
+                        <span class="badge safe">Active</span>
+                    {% else %}
+                        <span class="badge" style="background:#333;color:#888">Disabled</span>
+                    {% endif %}
+                </td>
+                <td>{{ rule.created_at }}</td>
+                <td style="display:flex;gap:0.5rem">
+                    <form method="POST" action="/dashboard/ip-rules/toggle/{{ rule.id }}">
+                        <button type="submit" class="filter-btn" style="padding:0.3rem 0.75rem;font-size:0.8rem;background:{% if rule.active %}#ff9800{% else %}#4caf50{% endif %}">
+                            {{ "Disable" if rule.active else "Enable" }}
+                        </button>
+                    </form>
+                    <form method="POST" action="/dashboard/ip-rules/delete/{{ rule.id }}">
+                        <button type="submit" class="filter-btn" style="padding:0.3rem 0.75rem;font-size:0.8rem;background:#f44336">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:#888">No whitelisted IPs</p>
+    {% endif %}
+</div>
+
+{% endblock %}

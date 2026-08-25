@@ -1,0 +1,52 @@
+# ==== Environment & Secrets ====
+.env
+.env.*
+!.env.example
+
+# ==== Database ====
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# ==== Python ====
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.Python
+build/
+dist/
+
+# ==== Virtual Environments ====
+venv/
+.venv/
+env/
+ENV/
+
+# ==== ML Models (large binaries — track via Git LFS or release assets instead) ====
+*.pkl
+*.joblib
+*.h5
+ml_models/*.bin
+
+# ==== IDE / Editor ====
+.vscode/
+.idea/
+*.swp
+
+# ==== OS ====
+.DS_Store
+Thumbs.db
+
+# ==== Logs ====
+*.log
+logs/
+
+# ==== Alembic (keep versions/ but ignore local cache if any) ====
+# alembic/versions/  # uncomment only if you intentionally don't want migration history tracked
+
+# ==== Debug / Local scratch files ====
+debug.py

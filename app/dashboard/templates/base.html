@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAF Dashboard</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+
+<body class="{% if request.url.path == '/dashboard/login' %}login-page{% endif %}">
+
+    <nav>
+        <div class="nav-brand">🛡️ WAF Dashboard</div>
+
+        {% if request.url.path != '/dashboard/login' %}
+        <div class="nav-links">
+            <a href="/dashboard/">Overview</a>
+            <a href="/dashboard/requests">Requests</a>
+            <a href="/dashboard/ip-rules">IP Rules</a>
+        </div>
+        <div class="nav-right">
+            <div class="nav-status">
+                <span class="status-dot" id="status-dot"></span>
+                <span id="status-text">Connecting...</span>
+            </div>
+            <a href="/dashboard/logout" class="logout-btn">Logout</a>
+        </div>
+        {% endif %}
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if request.url.path != '/dashboard/login' %}
+    <script src="/static/js/realtime.js"></script>
+    {% endif %}
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>

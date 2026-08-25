@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number" id="total">{{ total }}</div>
+        <div class="stat-label">Total Requests</div>
+    </div>
+    <div class="stat-card safe">
+        <div class="stat-number" id="safe">{{ safe }}</div>
+        <div class="stat-label">Safe</div>
+    </div>
+    <div class="stat-card danger">
+        <div class="stat-number" id="malicious">{{ malicious }}</div>
+        <div class="stat-label">Malicious</div>
+    </div>
+    <div class="stat-card warning">
+        <div class="stat-number" id="blocked">{{ blocked }}</div>
+        <div class="stat-label">Blocked</div>
+    </div>
+</div>
+
+<!-- Attack Types -->
+{% if attack_types %}
+<div class="section">
+    <h2>Attack Types</h2>
+    <div class="attack-grid">
+        {% for attack, count in attack_types.items() %}
+        <div class="attack-card">
+            <span class="attack-name">{{ attack }}</span>
+            <span class="attack-count">{{ count }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Live Feed -->
+<div class="section">
+    <h2>Live Feed</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>IP</th>
+                <th>Method</th>
+                <th>URL</th>
+                <th>Status</th>
+                <th>Attack Type</th>
+                <th>ML Score</th>
+            </tr>
+        </thead>
+        <tbody id="live-feed">
+            {% for log in recent_logs %}
+            <tr class="{{ 'row-danger' if log.is_malicious else 'row-safe' }}">
+                <td>{{ log.timestamp }}</td>
+                <td>{{ log.ip_address }}</td>
+                <td>{{ log.method }}</td>
+                <td>{{ log.url[:50] }}...</td>
+                <td>
+                    {% if log.blocked %}
+                        <span class="badge danger">Blocked</span>
+                    {% else %}
+                        <span class="badge safe">Safe</span>
+                    {% endif %}
+                </td>
+                <td>{{ log.attack_type or "-" }}</td>
+                <td>{{ log.ml_score or "-" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
