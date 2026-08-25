@@ -575,7 +575,10 @@ Attack Detected
 
 ---
 
+## Project Summary
 
-## Repository
+**WAF Based on ML** is a hybrid Web Application Firewall that combines **rule-based detection** with **Machine Learning** to analyze and filter malicious HTTP traffic before it reaches a protected web application.
 
-**GitHub:** [AmrKallab/WAF-Based-on-ML](https://github.com/AmrKallab/WAF-Based-on-ML)
+The system integrates multiple security layers, including attack detection, ML-based request classification, IP access control, rate limiting, request logging, and real-time monitoring through a web dashboard.
+
+This project demonstrates the practical integration of **Web Security, Backend Engineering, Machine Learning, and Database Management** into a unified security system.
