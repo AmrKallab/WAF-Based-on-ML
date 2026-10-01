@@ -463,7 +463,7 @@ cd WAF-Based-on-ML
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate
+.venv\scripts\activate
 ```
 
 #### Linux / macOS
